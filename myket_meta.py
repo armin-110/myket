@@ -27,7 +27,7 @@ class GETMETA():
 
     def get_meta(self):
         meta_data_list.clear()
-        meta_dic = {'cat':'','categori_name':'','content_name': '','content_link':self.content_link,'rate':'','ratings':'0','Size':'','Download':'0','Current Version':'','Last Update':'','Creator':'','crawling_date':''}
+        meta_dic = {'cat':'','categori_name':'','content_name': '','content_link':self.content_link,'rate':'0','ratings':'0','Size':'','Download':'0','Current Version':'','Last Update':'','Creator':'','crawling_date':''}
         # try:
         response = self.s.get(self.content_link, headers={"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.94 Safari/537.36"})
         page_html=response.text
@@ -57,18 +57,18 @@ class GETMETA():
             if json_class_find_name[0]['table']['tr'][i]['th']['text']=='تعداد دانلود':
                 pattern = '[ا-ی]'
                 if 'هزار' in json_class_find_name[0]['table']['tr'][i]['td']['text']:
-                    meta_dic['Download']=str(int((float(re.sub(pattern,'', json_class_find_name[0]['table']['tr'][i]['td']['text'])))*1000)).strip()
+                    meta_dic['Download']=int((float(re.sub(pattern,'', json_class_find_name[0]['table']['tr'][i]['td']['text'])))*1000)
           
                 elif 'میلیون' in json_class_find_name[0]['text']:
-                    meta_dic['Download']=str(int((float(re.sub(pattern,'', json_class_find_name[0]['table']['tr'][i]['td']['text'])))*1000000)).strip()
+                    meta_dic['Download']=int((float(re.sub(pattern,'', json_class_find_name[0]['table']['tr'][i]['td']['text'])))*1000000)
                 else:
-                    meta_dic['Download']=str(int(float(re.sub(pattern,'', json_class_find_name[0]['table']['tr'][i]['td']['text'])))).strip()
+                    meta_dic['Download']=int(float(re.sub(pattern,'', json_class_find_name[0]['table']['tr'][i]['td']['text'])))
                     
                 # meta_dic['Download']=json_class_find_name[0]['table']['tr'][i]['td']['text']  
             if json_class_find_name[0]['table']['tr'][i]['th']['text']=='امتیاز':
-                meta_dic['rate']=json_class_find_name[0]['table']['tr'][i]['td']['text']       
+                meta_dic['rate']=float(json_class_find_name[0]['table']['tr'][i]['td']['text'])   
             if json_class_find_name[0]['table']['tr'][i]['th']['text']=='تعداد نظرات':
-                meta_dic['ratings']=str(int(float(json_class_find_name[0]['table']['tr'][i]['td']['text'].replace(",", "")))).strip()
+                meta_dic['ratings']=int(float(json_class_find_name[0]['table']['tr'][i]['td']['text'].replace(",", "")))
             
             if json_class_find_name[0]['table']['tr'][i]['th']['text']=='حجم':
                 meta_dic['Size']=json_class_find_name[0]['table']['tr'][i]['td']['text'] 
